@@ -30,15 +30,15 @@ func newClient(response string) *marketdata.Client {
 	)
 }
 
-func TestNewAlpacaRepository(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepository("", "")
+func TestNewAlpacaBarsRepository(t *testing.T) {
+	repository := indicatoralpaca.NewAlpacaBarsRepository("", "")
 	if repository == nil {
 		t.Fatal("expected repository")
 	}
 }
 
-func TestAlpacaRepositoryAssets(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepositoryWithClient(newClient(""))
+func TestAlpacaBarsRepositoryAssets(t *testing.T) {
+	repository := indicatoralpaca.NewAlpacaBarsRepositoryWithClient(newClient(""))
 
 	_, err := repository.Assets()
 	if err != errors.ErrUnsupported {
@@ -46,8 +46,8 @@ func TestAlpacaRepositoryAssets(t *testing.T) {
 	}
 }
 
-func TestAlpacaRepositoryGet(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepositoryWithClient(newClient(
+func TestAlpacaBarsRepositoryGet(t *testing.T) {
+	repository := indicatoralpaca.NewAlpacaBarsRepositoryWithClient(newClient(
 		`{"bars":{"A":[{"t":"2021-10-15T16:00:00Z","o":3378.14,"h":3380.815,"l":3376.3001,"c":3379.72,"v":211689,"n":5435,"vw":3379.041755}]},"next_page_token":null}`,
 	))
 
@@ -66,8 +66,8 @@ func TestAlpacaRepositoryGet(t *testing.T) {
 	}
 }
 
-func TestAlpacaRepositoryGetFailed(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepositoryWithClient(newClient(""))
+func TestAlpacaBarsRepositoryGetFailed(t *testing.T) {
+	repository := indicatoralpaca.NewAlpacaBarsRepositoryWithClient(newClient(""))
 
 	_, err := repository.Get("A")
 	if err == nil {
@@ -76,7 +76,7 @@ func TestAlpacaRepositoryGetFailed(t *testing.T) {
 }
 
 func TestTiingoRepositoryLastDate(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepositoryWithClient(newClient(
+	repository := indicatoralpaca.NewAlpacaBarsRepositoryWithClient(newClient(
 		`{"bars":{"A":{"t":"2021-10-15T16:00:00Z","o":3378.14,"h":3380.815,"l":3376.3001,"c":3379.72,"v":211689,"n":5435,"vw":3379.041755}}}`,
 	))
 
@@ -93,7 +93,7 @@ func TestTiingoRepositoryLastDate(t *testing.T) {
 }
 
 func TestAlpacaRepositorLastDateFailed(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepositoryWithClient(newClient(""))
+	repository := indicatoralpaca.NewAlpacaBarsRepositoryWithClient(newClient(""))
 
 	_, err := repository.LastDate("A")
 	if err == nil {
@@ -101,8 +101,8 @@ func TestAlpacaRepositorLastDateFailed(t *testing.T) {
 	}
 }
 
-func TestAlpacaRepositoryAppend(t *testing.T) {
-	repository := indicatoralpaca.NewAlpacaRepositoryWithClient(newClient(""))
+func TestAlpacaBarsRepositoryAppend(t *testing.T) {
+	repository := indicatoralpaca.NewAlpacaBarsRepositoryWithClient(newClient(""))
 
 	err := repository.Append("A", nil)
 	if err != errors.ErrUnsupported {

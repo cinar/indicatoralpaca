@@ -14,13 +14,13 @@ import (
 )
 
 const (
-	// DefaultAlpacaRepositoryTimeFrameUnit is the default time frame unit of a day.
-	DefaultAlpacaRepositoryTimeFrameUnit = marketdata.Day
+	// DefaultAlpacaBarsRepositoryTimeFrameUnit is the default time frame unit of a day.
+	DefaultAlpacaBarsRepositoryTimeFrameUnit = marketdata.Day
 )
 
-// AlpacaRepository provides access to financial market data, retrieving asset snapshots, by interacting with the
+// AlpacaBarsRepository provides access to financial market data, retrieving asset snapshots, by interacting with the
 // Alpaca Markets API. To use this repository, you'll need a valid API key from https://alpaca.markets.
-type AlpacaRepository struct {
+type AlpacaBarsRepository struct {
 	// Client is the Alpaca Markets client.
 	client *marketdata.Client
 
@@ -40,9 +40,9 @@ func barToSnapshot(bar marketdata.Bar) *asset.Snapshot {
 	}
 }
 
-// NewAlpacaRepository initializes an Alpaca Markets repository with the given API key and API secret.
-func NewAlpacaRepository(apiKey, apiSecret string) *AlpacaRepository {
-	return NewAlpacaRepositoryWithClient(marketdata.NewClient(
+// NewAlpacaBarsRepository initializes an Alpaca Markets repository with the given API key and API secret.
+func NewAlpacaBarsRepository(apiKey, apiSecret string) *AlpacaBarsRepository {
+	return NewAlpacaBarsRepositoryWithClient(marketdata.NewClient(
 		marketdata.ClientOpts{
 			APIKey:    apiKey,
 			APISecret: apiSecret,
@@ -50,28 +50,28 @@ func NewAlpacaRepository(apiKey, apiSecret string) *AlpacaRepository {
 	))
 }
 
-// NewAlpacaRepositoryWithClient initializes an Alpaca Markets repository with the given client.
-func NewAlpacaRepositoryWithClient(client *marketdata.Client) *AlpacaRepository {
-	return &AlpacaRepository{
+// NewAlpacaBarsRepositoryWithClient initializes an Alpaca Markets repository with the given client.
+func NewAlpacaBarsRepositoryWithClient(client *marketdata.Client) *AlpacaBarsRepository {
+	return &AlpacaBarsRepository{
 		client: client,
 		GetBarsRequestTemplate: marketdata.GetBarsRequest{
-			TimeFrame: marketdata.NewTimeFrame(1, DefaultAlpacaRepositoryTimeFrameUnit),
+			TimeFrame: marketdata.NewTimeFrame(1, DefaultAlpacaBarsRepositoryTimeFrameUnit),
 		},
 	}
 }
 
 // Assets returns the names of all assets in the repository.
-func (*AlpacaRepository) Assets() ([]string, error) {
+func (*AlpacaBarsRepository) Assets() ([]string, error) {
 	return nil, errors.ErrUnsupported
 }
 
 // Get attempts to return a channel of snapshots for the asset with the given name.
-func (r *AlpacaRepository) Get(name string) (<-chan *asset.Snapshot, error) {
+func (r *AlpacaBarsRepository) Get(name string) (<-chan *asset.Snapshot, error) {
 	return r.GetSince(name, time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC))
 }
 
 // GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
-func (r *AlpacaRepository) GetSince(name string, date time.Time) (<-chan *asset.Snapshot, error) {
+func (r *AlpacaBarsRepository) GetSince(name string, date time.Time) (<-chan *asset.Snapshot, error) {
 	request := r.GetBarsRequestTemplate
 	request.Start = date
 
@@ -89,7 +89,7 @@ func (r *AlpacaRepository) GetSince(name string, date time.Time) (<-chan *asset.
 }
 
 // LastDate returns the date of the last snapshot for the asset with the given name.
-func (r *AlpacaRepository) LastDate(name string) (time.Time, error) {
+func (r *AlpacaBarsRepository) LastDate(name string) (time.Time, error) {
 	request := marketdata.GetLatestBarRequest{}
 
 	bar, err := r.client.GetLatestBar(name, request)
@@ -101,6 +101,6 @@ func (r *AlpacaRepository) LastDate(name string) (time.Time, error) {
 }
 
 // Append adds the given snapshows to the asset with the given name.
-func (*AlpacaRepository) Append(_ string, _ <-chan *asset.Snapshot) error {
+func (*AlpacaBarsRepository) Append(_ string, _ <-chan *asset.Snapshot) error {
 	return errors.ErrUnsupported
 }

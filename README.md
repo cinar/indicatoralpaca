@@ -11,9 +11,14 @@ Example
 This example showcases Alpaca Markets data access within the Indicator library.
 
 ```go
+// Initialize a new Alpaca Markets repository
+repository := indicatoralpaca.NewAlpacaBarsRepository("key", "secret")
 
-repository := indicatoralpaca.NewAlpacaRepository("key", "secret")
+// Make any necessary changes in GetBarsRequest
+repository.GetBarsRequestTempalte.Adjustment = "raw"
+repository.GetBarsRequestTemplate.Currency = "usd"
 
+// Use the Alpaca Markets repository in backtesting
 backtest := strategy.NewBacktest(repository, "output")
 backtest.Names = append(backtest.Names, "brk-b")
 backtest.Strategies = append(backtest.Strategies, trend.NewAroonStrategy())
@@ -38,36 +43,36 @@ Index
 -----
 
 -	[Constants](#constants)
--	[type AlpacaRepository](#AlpacaRepository)
-	-	[func NewAlpacaRepository\(apiKey, apiSecret string\) \*AlpacaRepository](#NewAlpacaRepository)
-	-	[func NewAlpacaRepositoryWithClient\(client \*marketdata.Client\) \*AlpacaRepository](#NewAlpacaRepositoryWithClient)
-	-	[func \(\*AlpacaRepository\) Append\(\_ string, \_ \<\-chan \*asset.Snapshot\) error](#AlpacaRepository.Append)
-	-	[func \(\*AlpacaRepository\) Assets\(\) \(\[\]string, error\)](#AlpacaRepository.Assets)
-	-	[func \(r \*AlpacaRepository\) Get\(name string\) \(\<\-chan \*asset.Snapshot, error\)](#AlpacaRepository.Get)
-	-	[func \(r \*AlpacaRepository\) GetSince\(name string, date time.Time\) \(\<\-chan \*asset.Snapshot, error\)](#AlpacaRepository.GetSince)
-	-	[func \(r \*AlpacaRepository\) LastDate\(name string\) \(time.Time, error\)](#AlpacaRepository.LastDate)
+-	[type AlpacaBarsRepository](#AlpacaBarsRepository)
+	-	[func NewAlpacaBarsRepository\(apiKey, apiSecret string\) \*AlpacaBarsRepository](#NewAlpacaBarsRepository)
+	-	[func NewAlpacaBarsRepositoryWithClient\(client \*marketdata.Client\) \*AlpacaBarsRepository](#NewAlpacaBarsRepositoryWithClient)
+	-	[func \(\*AlpacaBarsRepository\) Append\(\_ string, \_ \<\-chan \*asset.Snapshot\) error](#AlpacaBarsRepository.Append)
+	-	[func \(\*AlpacaBarsRepository\) Assets\(\) \(\[\]string, error\)](#AlpacaBarsRepository.Assets)
+	-	[func \(r \*AlpacaBarsRepository\) Get\(name string\) \(\<\-chan \*asset.Snapshot, error\)](#AlpacaBarsRepository.Get)
+	-	[func \(r \*AlpacaBarsRepository\) GetSince\(name string, date time.Time\) \(\<\-chan \*asset.Snapshot, error\)](#AlpacaBarsRepository.GetSince)
+	-	[func \(r \*AlpacaBarsRepository\) LastDate\(name string\) \(time.Time, error\)](#AlpacaBarsRepository.LastDate)
 
 Constants
 ---------
 
-<a name="DefaultAlpacaRepositoryTimeFrameUnit"></a>
+<a name="DefaultAlpacaBarsRepositoryTimeFrameUnit"></a>
 
 ```go
 const (
-	// DefaultAlpacaRepositoryTimeFrameUnit is the default time frame unit of a day.
-	DefaultAlpacaRepositoryTimeFrameUnit = marketdata.Day
+	// DefaultAlpacaBarsRepositoryTimeFrameUnit is the default time frame unit of a day.
+	DefaultAlpacaBarsRepositoryTimeFrameUnit = marketdata.Day
 )
 ```
 
-<a name="AlpacaRepository"></a>
+<a name="AlpacaBarsRepository"></a>
 
-type [AlpacaRepository](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L23-L29)
---------------------------------------------------------------------------------------------------------
+type AlpacaBarsRepository
+-------------------------
 
-AlpacaRepository provides access to financial market data, retrieving asset snapshots, by interacting with the Alpaca Markets API. To use this repository, you'll need a valid API key from https://alpaca.markets.
+AlpacaBarsRepository provides access to financial market data, retrieving asset snapshots, by interacting with the Alpaca Markets API. To use this repository, you'll need a valid API key from https://alpaca.markets.
 
 ```go
-type AlpacaRepository struct {
+type AlpacaBarsRepository struct {
 
 	// GetBarsRequestTemplate is the request template used to get the bars.
 	GetBarsRequestTemplate marketdata.GetBarsRequest
@@ -75,72 +80,72 @@ type AlpacaRepository struct {
 }
 ```
 
-<a name="NewAlpacaRepository"></a>
+<a name="NewAlpacaBarsRepository"></a>
 
-### func [NewAlpacaRepository](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L44)
+### func NewAlpacaBarsRepository
 
 ```go
-func NewAlpacaRepository(apiKey, apiSecret string) *AlpacaRepository
+func NewAlpacaBarsRepository(apiKey, apiSecret string) *AlpacaBarsRepository
 ```
 
-NewAlpacaRepository initializes an Alpaca Markets repository with the given API key and API secret.
+NewAlpacaBarsRepository initializes an Alpaca Markets repository with the given API key and API secret.
 
-<a name="NewAlpacaRepositoryWithClient"></a>
+<a name="NewAlpacaBarsRepositoryWithClient"></a>
 
-### func [NewAlpacaRepositoryWithClient](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L54)
+### func NewAlpacaBarsRepositoryWithClient
 
 ```go
-func NewAlpacaRepositoryWithClient(client *marketdata.Client) *AlpacaRepository
+func NewAlpacaBarsRepositoryWithClient(client *marketdata.Client) *AlpacaBarsRepository
 ```
 
-NewAlpacaRepositoryWithClient initializes an Alpaca Markets repository with the given client.
+NewAlpacaBarsRepositoryWithClient initializes an Alpaca Markets repository with the given client.
 
-<a name="AlpacaRepository.Append"></a>
+<a name="AlpacaBarsRepository.Append"></a>
 
-### func \(\*AlpacaRepository\) [Append](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L104)
+### func \(\*AlpacaBarsRepository\) Append
 
 ```go
-func (*AlpacaRepository) Append(_ string, _ <-chan *asset.Snapshot) error
+func (*AlpacaBarsRepository) Append(_ string, _ <-chan *asset.Snapshot) error
 ```
 
 Append adds the given snapshows to the asset with the given name.
 
-<a name="AlpacaRepository.Assets"></a>
+<a name="AlpacaBarsRepository.Assets"></a>
 
-### func \(\*AlpacaRepository\) [Assets](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L64)
+### func \(\*AlpacaBarsRepository\) Assets
 
 ```go
-func (*AlpacaRepository) Assets() ([]string, error)
+func (*AlpacaBarsRepository) Assets() ([]string, error)
 ```
 
 Assets returns the names of all assets in the repository.
 
-<a name="AlpacaRepository.Get"></a>
+<a name="AlpacaBarsRepository.Get"></a>
 
-### func \(\*AlpacaRepository\) [Get](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L69)
+### func \(\*AlpacaBarsRepository\) Get
 
 ```go
-func (r *AlpacaRepository) Get(name string) (<-chan *asset.Snapshot, error)
+func (r *AlpacaBarsRepository) Get(name string) (<-chan *asset.Snapshot, error)
 ```
 
 Get attempts to return a channel of snapshots for the asset with the given name.
 
-<a name="AlpacaRepository.GetSince"></a>
+<a name="AlpacaBarsRepository.GetSince"></a>
 
-### func \(\*AlpacaRepository\) [GetSince](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L74)
+### func \(\*AlpacaBarsRepository\) GetSince
 
 ```go
-func (r *AlpacaRepository) GetSince(name string, date time.Time) (<-chan *asset.Snapshot, error)
+func (r *AlpacaBarsRepository) GetSince(name string, date time.Time) (<-chan *asset.Snapshot, error)
 ```
 
 GetSince attempts to return a channel of snapshots for the asset with the given name since the given date.
 
-<a name="AlpacaRepository.LastDate"></a>
+<a name="AlpacaBarsRepository.LastDate"></a>
 
-### func \(\*AlpacaRepository\) [LastDate](https://github.com/cinar/indicatoralpaca/blob/main/alpaca_repository.go#L92)
+### func \(\*AlpacaBarsRepository\) LastDate
 
 ```go
-func (r *AlpacaRepository) LastDate(name string) (time.Time, error)
+func (r *AlpacaBarsRepository) LastDate(name string) (time.Time, error)
 ```
 
 LastDate returns the date of the last snapshot for the asset with the given name.
