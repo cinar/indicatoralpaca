@@ -36,7 +36,7 @@ func barToSnapshot(bar marketdata.Bar) *asset.Snapshot {
 		High:   bar.High,
 		Low:    bar.Low,
 		Close:  bar.Close,
-		Volume: int64(bar.Volume),
+		Volume: float64(bar.Volume),
 	}
 }
 
