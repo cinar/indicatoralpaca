@@ -18,22 +18,10 @@ jobs:
       with:
         go-version-file: ./go.mod
 
-    - name: Go vet
-      run: go vet ./...
-
-    - name: Run Gosec
-      uses: securego/gosec@master
-      with:
-        args: ./...
-
-    - name: Go fix
-      run: go fix ./...
-      
-    - name: Go build
-      run: go build -v ./...
-
-    - name: Go test
-      run: go test -v -coverprofile=coverage.out ./...
+    - name: Run task
+      run:
+        - (command -v task) || go install github.com/go-task/task/v3/cmd/task@latest
+        - task action
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.5.0
