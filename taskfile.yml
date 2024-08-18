@@ -10,9 +10,7 @@ tasks:
       - task: docs
 
   action:
-    cmds:
-      - task: lint
-      - task: test
+    deps: [lint, test]
 
   fmt:
     cmds:
@@ -21,8 +19,9 @@ tasks:
   lint:
     cmds:
       - go vet ./...
-      - task: gosec
-      - task: staticcheck
+      - go run github.com/securego/gosec/v2/cmd/gosec@v2.20.0 ./...
+      - go run honnef.co/go/tools/cmd/staticcheck@v0.5.1 ./...
+      - go run github.com/mgechev/revive@v1.3.4 -config=revive.toml ./...
 
   test:
     cmds:
@@ -30,34 +29,4 @@ tasks:
 
   docs:
     cmds:
-      - task: gomarkdoc
-      - task: markdownfmt
-
-  revive:
-    vars:
-      CONFIG: revive.toml
-    preconditions:
-      - test -f "{{.CONFIG}}"
-    cmds:
-      - (command -v revive) || go install github.com/mgechev/revive@v1.3.4
-      - revive -config=revive.toml ./...
-
-  staticcheck:
-    cmds:
-      - (command -v staticcheck) || go install honnef.co/go/tools/cmd/staticcheck@latest
-      - staticcheck ./...
-
-  gomarkdoc:
-    cmds:
-      - (command -v gomarkdoc) || go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
-      - gomarkdoc ./...
-
-  gosec:
-    cmds:
-      - (command -v gosec) || go install github.com/securego/gosec/v2/cmd/gosec@latest
-      - gosec ./...
-
-  markdownfmt:
-    cmds:
-      - (command -v markdownfmt) || go install github.com/shurcooL/markdownfmt@latest
-      - markdownfmt -w README.md
+      - go run github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0 ./...
