@@ -18,11 +18,8 @@ jobs:
       with:
         go-version-file: ./go.mod
 
-    - name: Install task
-      run: (command -v task) || go install github.com/go-task/task/v3/cmd/task@latest
-
     - name: Run task
-      run: task action
+      run: go run github.com/go-task/task/v3/cmd/task@v3.38.0
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.5.0
