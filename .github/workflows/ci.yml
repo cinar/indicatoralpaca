@@ -31,6 +31,6 @@ jobs:
       run: go run github.com/go-task/task/v3/cmd/task@v3.38.0
 
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.5.0
+      uses: codecov/codecov-action@v4.6.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
