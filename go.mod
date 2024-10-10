@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/alpacahq/alpaca-trade-api-go/v3 v3.6.0
-	github.com/cinar/indicator/v2 v2.1.5
+	github.com/cinar/indicator/v2 v2.1.6
 )
 
 require (
